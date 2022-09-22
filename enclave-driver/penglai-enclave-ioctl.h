@@ -73,6 +73,10 @@ struct penglai_enclave_user_param
   unsigned long schrodinger_offset;
   unsigned long schrodinger_size;
   unsigned long retval;
+  unsigned long wasm_vm_mr_ptr;
+  unsigned long wasm_vm_mr_size;
+  unsigned long wasm_ptr;
+  unsigned long wasm_size;
 };
 
 struct penglai_enclave_sbi_param
