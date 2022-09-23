@@ -14,6 +14,11 @@ struct args
   int i;
 };
 
+typedef struct _penglai_wasm_t {
+    unsigned long size;
+    unsigned char wasm_blob[];
+} penglai_wasm_t;
+
 void printHex(unsigned int *c, int n)
 {
 	int i;
@@ -77,7 +82,11 @@ void* create_mapping_enclave(void* in)
 
   params->wasm_vm_mr_ptr = (unsigned long) wasm_vm_mr;
   params->wasm_vm_mr_size = PENGLAI_WASM_VM_MR_SEC_SIZE;
-  params->wasm_ptr = (unsigned long)wasm_file_buf;
+
+  penglai_wasm_t *wasm_blob_buf = (penglai_wasm_t *)malloc(PENGLAI_WASM_SEC_SIZE);
+  wasm_blob_buf->size = wasm_file_buf_len;
+  memcpy(wasm_blob_buf->wasm_blob, wasm_file_buf, wasm_file_buf_len);
+  params->wasm_ptr = (unsigned long)wasm_blob_buf;
   params->wasm_size = PENGLAI_WASM_SEC_SIZE;
 
   char str_num[15];
@@ -128,7 +137,10 @@ void* create_vm_enclave(void* in)
 
   struct elf_args *enclaveFile = (struct elf_args *)in;
 
-  params->wasm_ptr = (unsigned long)wasm_file_buf;
+  penglai_wasm_t *wasm_blob_buf = (penglai_wasm_t*)malloc(PENGLAI_WASM_SEC_SIZE);
+  wasm_blob_buf->size = wasm_file_buf_len;
+  memcpy(wasm_blob_buf->wasm_blob, wasm_file_buf, wasm_file_buf_len);
+  params->wasm_ptr = (unsigned long)wasm_blob_buf;
   params->wasm_size = PENGLAI_WASM_SEC_SIZE;
 
   char str_num[15];
