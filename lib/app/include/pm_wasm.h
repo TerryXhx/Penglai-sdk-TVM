@@ -34,4 +34,21 @@ void penglai_wasm_derive_measurement(unsigned char *hash, unsigned long nonce);
 
 void penglai_wasm_get_hash(unsigned char *wasm_blob, unsigned long wasm_blob_size, unsigned char *hash);
 
+#define MAX_FUNC_NAME_LEN 32
+#define MAX_FUNC_ARGC 8
+#define MAX_FUNC_ARG_LEN 16
+
+typedef struct _penglai_vm_params_t {
+    char func_name[MAX_FUNC_NAME_LEN];
+    unsigned long stack_size;
+    unsigned long heap_size;
+    int log_verbose_level;
+    bool is_repl_mode;
+    bool alloc_with_pool;
+    int max_thread_num;
+    unsigned long argc;
+    // uint64_t args[MAX_FUNC_ARGC];
+    char args[MAX_FUNC_ARGC][MAX_FUNC_ARG_LEN];
+} penglai_vm_params_t;
+
 #endif /* _MAGE_H */
