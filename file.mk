@@ -3,6 +3,8 @@ SDK_FILES = \
 	$(srcdir)/Penglai-sdk-TVM/demo/host/host \
 	$(srcdir)/Penglai-sdk-TVM/demo/fork-host/fork-host \
 	$(srcdir)/Penglai-sdk-TVM/demo/host-pm-wasm/host-pm-wasm \
+	$(srcdir)/Penglai-sdk-TVM/demo/host-pm-wasm-evaluation/host-pm-wasm-evaluation \
+	$(srcdir)/Penglai-sdk-TVM/demo/host-pm-wasm-steps/host-pm-wasm-steps \
 	$(srcdir)/Penglai-sdk-TVM/demo/pm-mapping/pm-mapping \
 	$(srcdir)/Penglai-sdk-TVM/demo/hello-world/hello-world \
 	$(srcdir)/Penglai-sdk-TVM/demo/relay-page/relay-page \
