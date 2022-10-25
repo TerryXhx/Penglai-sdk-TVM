@@ -189,6 +189,34 @@ int penglai_enclave_create(struct file *filep, unsigned long args)
     goto destroy_enclave;
   }
 
+  if (enclave_param->wasm_vm_mr_size > 0)
+  {
+    int offset;
+    for (offset = 0; offset < enclave_param->wasm_vm_mr_size; offset += RISCV_PGSIZE)
+    {
+      vaddr_t enclave_wasm_vm_mr_page = enclave_alloc_page(enclave->enclave_mem, (0xfffffff000000000UL + offset), ENCLAVE_USER_ROPAGE);
+      if (copy_from_user((void*)enclave_wasm_vm_mr_page, (void*)(enclave_param->wasm_vm_mr_ptr + offset), RISCV_PGSIZE))
+      {
+        penglai_eprintf("copy wasm_vm_mr_ptr from user failed\n");
+        return -EFAULT;
+      }
+    }
+  }
+
+  if (enclave_param->wasm_size > 0)
+  {
+    int offset;
+    for (offset = 0; offset < enclave_param->wasm_size; offset += RISCV_PGSIZE)
+    {
+      vaddr_t enclave_wasm_page = enclave_alloc_page(enclave->enclave_mem, (0xfffffff000001000UL + offset), ENCLAVE_USER_ROPAGE);
+      if (copy_from_user((void*)enclave_wasm_page, (void*)(enclave_param->wasm_ptr + offset), RISCV_PGSIZE))
+      {
+        penglai_eprintf("copy wasm_ptr from user failed\n");
+        return -EFAULT;
+      }
+    }
+  }
+
   free_mem = get_free_mem(&(enclave->enclave_mem->free_mem));
   shm_vaddr = get_shm(enclave_param->shmid, enclave_param->shm_offset, enclave_param->shm_size);
   shm_size = enclave_param->shm_size;
