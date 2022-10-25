@@ -422,6 +422,16 @@ run_enclave(struct PLenclave* enclave, unsigned long mm_arg_size, int mm_arg_id,
     result = PLenclave_run(enclave);
     if(result != RETURN_USER_RELAY_PAGE) return;
 
+    //*********destroy runtime environment**********
+    vm_params.ecall_cmd = CMD_DESTROY_RUNTIME;
+    memcpy(mm_arg, &vm_params, sizeof(vm_params));
+    if(mm_arg_id > 0 && mm_arg)
+        PLenclave_set_mem_arg(enclave, mm_arg_id, 0, mm_arg_size);
+    PLenclave_set_rerun_arg(enclave, RETURN_USER_RELAY_PAGE);
+
+    result = PLenclave_run(enclave);
+    if(result != RETURN_USER_RELAY_PAGE) return;
+
     //*****************exit*******************
     vm_params.ecall_cmd = CMD_EXIT;
     memcpy(mm_arg, &vm_params, sizeof(vm_params));
