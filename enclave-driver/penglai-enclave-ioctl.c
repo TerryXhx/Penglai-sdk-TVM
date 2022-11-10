@@ -659,6 +659,8 @@ long penglai_enclave_ioctl(struct file* filep, unsigned int cmd, unsigned long a
   char ioctl_data[1024];
   int ioc_size, ret;
   ioc_size = _IOC_SIZE(cmd);
+  if (cmd == PENGLAI_ENCLAVE_IOC_ATTEST_ENCLAVE)
+    ioc_size = 488;
   if (ioc_size > sizeof(ioctl_data))
   {
     penglai_eprintf("ioc_data buff is not enough\n");

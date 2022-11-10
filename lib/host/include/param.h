@@ -58,6 +58,7 @@
 #define PUBLIC_KEY_SIZE        64
 #define HASH_SIZE              32
 #define SIGNATURE_SIZE         64
+#define PREMR_SIZE             144
 
 struct sm_report_t
 {
@@ -78,6 +79,7 @@ struct report_t
   struct sm_report_t sm;
   struct enclave_report_t enclave;
   unsigned char dev_pub_key[PUBLIC_KEY_SIZE];
+  unsigned char pre_mr[PREMR_SIZE];
 };
 
 struct signature_t
