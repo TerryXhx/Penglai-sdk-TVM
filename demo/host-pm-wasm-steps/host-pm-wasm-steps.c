@@ -75,6 +75,17 @@ void printHash(unsigned char *hash)
   printf("\n");
 }
 
+void printHashCtx(unsigned long *hash)
+{
+	int i;
+  printf("intermediate hash ctx:\n");
+	for (i = 0; i < 18; i++) {
+    printf("0x%016lx,\n", (*hash));
+    ++hash;
+	}
+}
+
+
 static int
 print_help()
 {
@@ -459,6 +470,8 @@ void* create_vm_enclave(void* in, int argc, char** argv)
   memcpy(wasm_blob_buf->wasm_blob, wasm_file_buf, wasm_file_buf_len);
   params->wasm_ptr = (unsigned long)wasm_blob_buf;
   params->wasm_size = PENGLAI_WASM_SEC_SIZE;
+  printf("before ------------\n");
+  printHashCtx((unsigned long*)enclave->attest_param.report.pre_mr);
 
   char str_num[15];
   sprintf(str_num, "vmEnclave");
@@ -477,6 +490,8 @@ void* create_vm_enclave(void* in, int argc, char** argv)
   {
     printf("%s's measurement:\n", str_num);
     PLenclave_attest(enclave, 0);
+    printf("after ------------\n");
+    printHashCtx((unsigned long*)enclave->attest_param.report.pre_mr);
     printHash(enclave->attest_param.report.enclave.hash);
     if(mm_arg_id > 0 && mm_arg)
       PLenclave_set_mem_arg(enclave, mm_arg_id, 0, mm_arg_size);
